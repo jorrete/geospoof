@@ -1,13 +1,11 @@
 {
   "name": "geospoof",
-  "version": "0.1.0",
   "description": "Spoof geolocation for development purpose.",
   "scripts": {
     "dev": "webextension-toolbox dev",
     "build": "webextension-toolbox build"
   },
   "devDependencies": {
-    "uglifyjs-webpack-plugin": "^2.2.0",
     "webextension-toolbox": "latest",
     "webpack-clear-console": "^1.0.3"
   },
