@@ -1,0 +1,11 @@
+{
+  "appName": {
+    "message": "Geospoof"
+  },
+  "appShortName": {
+    "message": "Geospoof"
+  },
+  "appDescription": {
+    "message": "Spoof geolocation API for development purposes."
+  }
+}

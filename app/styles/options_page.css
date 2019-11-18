@@ -1,0 +1,103 @@
+@import './helpers.css';
+
+html {
+    scroll-behavior: smooth;
+    font-family: Arial;
+    font-size: 1.3rem !important;
+}
+
+body {
+}
+
+@media (orientation:landscape) {
+}
+
+@media (orientation:portrait) {
+}
+
+body {
+    display: table;
+}
+
+#header, section {
+    display: table-row;
+}
+
+#header > *, section > * {
+    display: table-cell;
+}
+
+#title {
+    font-size: 72px;
+    font-weight: 900;
+    color: #ff715b;
+    text-shadow: -1px 0 #dd0f00, 0 1px #dd0f00, 1px 0 #dd0f00, 0 -1px #dd0f00;
+    vertical-align: middle;
+}
+
+section header {
+    font-weight: bold;
+    color: gray;
+    text-align: right;
+    padding-right: 1rem;
+}
+
+section {
+    border-collapse: separate; 
+    border-spacing: 1em;
+}
+
+section > :nth-child(2) {
+    padding: 2rem 0;
+}
+
+.subsection {
+    margin-bottom: 2rem;
+}
+
+.settings-title {
+    font-style: italic;
+    font-weight: bold;
+}
+
+.settings-description {
+    font-size: 0.9rem;
+    padding-left: 10px;
+}
+
+.settings-example {
+    font-size: 0.9rem;
+    color: #868080;
+    padding-left: 10px;
+}
+
+.settings-input {
+    display: block;
+    width: 100%;
+    border: 1px solid lightgray;
+    border-radius: 3px;
+    padding: 3px 5px;
+    margin-top: 10px;
+    box-sizing: border-box;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type=number] {
+    -moz-appearance:textfield; /* Firefox */
+}
+
+hr {
+    border-width: 1px 0 0 0 ;
+    border-style: solid;
+    border-color: lightgray;
+}
+
+#initial {
+    margin: 0;
+}

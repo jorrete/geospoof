@@ -1,0 +1,87 @@
+textarea, input, button {
+  display: inline-block;
+  position: relative;
+  box-sizing: border-box;
+  border: none;
+  margin: 0;
+  vertical-align: bottom;
+  border-radius: 0;
+  text-transform: none;
+  letter-spacing: normal;
+  text-indent: 0;
+  text-shadow: none;
+  padding: 0;
+  color: inherit;
+  word-spacing: inherit;
+  text-align: inherit;
+  font-style: inherit;
+  font-weight: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  background: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+input {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 0;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type=number] {
+    -moz-appearance:textfield; /* Firefox */
+}
+
+/* select { */
+/*     text-indent: 4px; */
+/*     width: 25px; */
+/* } */
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-indent: 1px;
+    text-overflow: '';
+    color: inherit;
+    word-spacing: inherit;
+    text-align: inherit;
+    font-style: inherit;
+    font-weight: inherit;
+    font-family: inherit;
+    font-size: inherit;
+
+    border: none;
+    background: none;
+}
+button {
+    cursor: pointer;
+}
+
+button::-moz-focus-inner {
+  border: 0;
+}
+
+button {
+    outline: none; // this one
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-tap-highlight-color: transparent;
+}
+
+button > * {
+    pointer-events: none;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1.0, width=device-width, maximum-scale=1.0, user-scalable=no">
+        <link rel="stylesheet" type="text/css" href="../styles/devtools_panel.css">
+        <script src="../scripts/devtools_panel.js" defer></script>
+    </head>
+    <body>
+        <div id="controls">
+            <div class="flex">
+                <div class="fill"></div>
+                <div class="fill center">
+                    <label id="status" class="switch pointer noselect rounded">
+                        <input id="enabled" type="checkbox" name="enabled" />
+                        <span id="on">ON</span>
+                        <span id="off">OFF</span>
+                    </label>
+                </div>
+                <div class="fill right">
+                    <button id="settings">
+                        <span>&#9881;</span>
+                    </button>
+                </div>
+            </div>
+            <div>
+                <fieldset class="rounded">
+                    <legend>Coordinates</legend>
+                    <fieldset class="rounded">
+                        <legend>Longitude</legend>
+                        <div class="flex right">
+                            <input class="fill" type="number"  lang="en_EN" name="lon" step="any" value="0" id="lon" />
+                        </div>
+                        <div class="flex right">
+                            <input class="fill" type="number" name="lon_deg" value="0" id="lon_deg" />
+                            <span>º</span>
+                            <input class="fill" type="number" name="lon_min" value="0" id="lon_min" />
+                            <span>'</span>
+                            <input class="fill" type="number" name="lon_sec" value="0" id="lon_sec" />
+                            <span>''</span>
+                            <select id="lon_orientation" name="lon_orientation">
+                                <option value="e" selected>E</option>
+                                <option value="w">W</option>
+                            </select>
+                        </div>
+                    </fieldset>
+                    <fieldset class="rounded">
+                        <legend>Latitude</legend>
+                        <div class="flex right">
+                            <input class="fill" type="number" lang="en_EN" name="lat" step="any" value="0" id="lat" />
+                        </div>
+                        <div class="flex right">
+                            <input class="fill" type="number" name="lat_deg" value="0" id="lat_deg" />
+                            <span>º</span>
+                            <input class="fill" type="number" name="lat_min" value="0" id="lat_min" />
+                            <span>'</span>
+                            <input class="fill" type="number" name="lat_sec" value="0" id="lat_sec" />
+                            <span>''</span>
+                            <select id="lat_orientation" name="lat_orientation">
+                                <option value="n" selected>N</option>
+                                <option value="s">S</option>
+                            </select>
+                        </div>
+                    </fieldset>
+                    <fieldset class="rounded">
+                        <legend>Accuracy</legend>
+                        <div class="right flex">
+                            <input class="fill" type="number" min="0" max="10000" step="1" value="4" name="accuracy_num" id="accuracy_num">
+                            <span>m</span>
+                        </div>
+                    </fieldset>
+                </fieldset>
+                <form id="track_form" onsubmit="return false">
+                <fieldset class="rounded">
+                    <legend>Track</legend>
+                    <div class="flex">
+                        <label id="file" class="pointer fill">
+                            <input type="file" name="track" id="track" accept=".gpx" />
+                            <span>&#128190;</span>
+                            <span id="track_name">GPX</span>
+                        </label>
+                        <button type="reset" id="track_reset" class="disabled">
+                            <span>&#128473;</span>
+                        </button>
+                    </div>
+                    <hr>
+                    <div id="track_controls" class="flex disabled">
+                        <div class="fill">
+                            <label class="button-switch noselect pointer rounded">
+                                <input id="track_play" checked type="checkbox" name="enabled" />
+                                <span>&#9205;</span>
+                                <span>&#9208;</span>
+                            </label>
+                        </div>
+                        <div class="fill">
+                            <div class="radio fill rounded">
+                                <label class="pointer">
+                                    <input type="radio" name="direction" checked value="forward">
+                                    <span> &#11106;</span>
+                                </label>
+                                <label class="pointer">
+                                    <input type="radio" name="direction" value="reverse">
+                                    <span>&#11104;</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="fill"></div>
+                        <div class="fill">
+                            <div class="radio fill rounded">
+                                <label class="pointer">
+                                    <input type="radio" name="mode" checked value="oneway">
+                                    <span>&#11122;</span>
+                                </label>
+                                <label class="pointer">
+                                    <input type="radio" name="mode" value="loop">
+                                    <span>&#8634;</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div id="speed-wrapper" class="fill right middle">
+                            <input class="fill" type="number" name="speed" size="4" id="speed" value="6" min="1" step="1" />
+                            <span>km/h</span>
+                        </div>
+                    </div>
+                </fieldset>
+                </form>
+            </div>
+        </div>
+        <div id="map-wrapper">
+            <div id="map"></div>
+        </div>
+    </body>
+</html>

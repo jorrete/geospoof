@@ -1,0 +1,44 @@
+.pointer {
+    cursor: pointer;
+}
+
+.center {
+    text-align: center;
+}
+
+.flex {
+    display: flex;
+}
+
+.fill {
+    flex: auto;
+}
+
+.right {
+    text-align: right;
+}
+
+.middle,
+.middle * {
+    vertical-align: middle;
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Opera and Firefox */
+}
+
+.rounded {
+    overflow: hidden;
+    border-radius: 4px;
+}
+
+.disabled {
+    opacity: 0.4;
+    pointer-events: none;
+}

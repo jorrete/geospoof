@@ -1,0 +1,20 @@
+{
+  "name": "geospoof",
+  "version": "0.1.0",
+  "description": "Spoof geolocation for development purpose.",
+  "scripts": {
+    "dev": "webextension-toolbox dev",
+    "build": "webextension-toolbox build"
+  },
+  "devDependencies": {
+    "webextension-toolbox": "latest"
+  },
+  "dependencies": {
+    "@turf/along": "^6.0.1",
+    "@turf/length": "^6.0.2",
+    "@turf/line-slice": "^5.1.5",
+    "@turf/nearest-point-on-line": "^6.0.2",
+    "@turf/point-to-line-distance": "^6.0.0",
+    "ol": "^6.0.1"
+  }
+}
