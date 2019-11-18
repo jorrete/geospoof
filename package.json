@@ -7,7 +7,8 @@
     "build": "webextension-toolbox build"
   },
   "devDependencies": {
-    "webextension-toolbox": "latest"
+    "webextension-toolbox": "latest",
+    "webpack-clear-console": "^1.0.3"
   },
   "dependencies": {
     "@turf/along": "^6.0.1",

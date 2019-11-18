@@ -151,10 +151,10 @@ export class StatusApp {
         this.map.loadTrack(this._track);
 
         if (!this.field.track_name._initial) {
-            this.field.track_name._initial = this.field.track_name.innerHTML;
+            this.field.track_name._initial = this.field.track_name.textContent;
         }
 
-        this.field.track_name.innerHTML = name;
+        this.field.track_name.textContent = name;
 
         this.playTrack();
     }
@@ -214,7 +214,7 @@ export class StatusApp {
         delete this._track;
         delete this._distance;
         this.map.clearTrack();
-        this.field.track_name.innerHTML = this.field.track_name._initial;
+        this.field.track_name.textContent = this.field.track_name._initial;
     }
 
     _setCoords(coords) {

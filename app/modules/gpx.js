@@ -63,13 +63,13 @@ class Point extends NodeBase {
                 });
             },
             'ele': (t, obj) => {
-                let ele = t.innerHTML.trim();
+                let ele = t.textContent.trim();
                 if (ele) {
                     obj.ele = parseFloat(ele);
                 }
             },
             'time': (t, obj) => {
-                let time = t.innerHTML.trim();
+                let time = t.textContent.trim();
                 if (time) {
                     obj.time = new Date(Date.parse(time)).getTime();
                 }
@@ -131,7 +131,7 @@ function generateMultiLineString(options) {
 
 function decodeHtml(html) {
     let txt = document.createElement('textarea');
-    txt.innerHTML = html;
+    txt.textContent = html;
     return txt.value;
 }
 
@@ -141,7 +141,7 @@ class Metadata extends NodeBase {
 
         this._data = parseTag(this._dom, {
             'time': (t, obj) => {
-                let time = t.innerHTML.trim();
+                let time = t.textContent.trim();
                 if (time) {
                     obj.time = new Date(Date.parse(time)).getTime();
                 }
@@ -207,7 +207,7 @@ class Trk extends NodeBase {
         super(...[].slice.call(arguments));
         this._data = parseTag(this._dom, {
             'name': (t, obj) => {
-                let name = decodeHtml(t.innerHTML.replace('<![CDATA[', '').replace(']]>', '').trim());
+                let name = decodeHtml(t.textContent.replace('<![CDATA[', '').replace(']]>', '').trim());
                 if (name) {
                     obj.name = name;
                 }
@@ -258,7 +258,7 @@ class Rte extends NodeBase {
         super(...[].slice.call(arguments));
         this._data = parseTag(this._dom, {
             'name': (t, obj) => {
-                let name = decodeHtml(t.innerHTML.replace('<![CDATA[', '').replace(']]>', '').trim());
+                let name = decodeHtml(t.textContent.replace('<![CDATA[', '').replace(']]>', '').trim());
                 if (name) {
                     obj.name = name;
                 }
