@@ -2,3 +2,4 @@ node_modules/
 dist/
 packages/
 example/
+package-lock.json
