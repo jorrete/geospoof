@@ -1,6 +1,6 @@
 console.log('[content_script]');
 
-function initFoo() {
+function init() {
     let status, position;
 
     const getCurrentPosition = navigator.geolocation.getCurrentPosition,
@@ -71,7 +71,7 @@ if (document.documentElement.tagName.toLowerCase() == 'html') {  // Skip non-htm
     let tag = document.createElement('script');
     tag.setAttribute('charset', 'utf-8');
     tag.setAttribute('async', 'false');
-    tag.textContent = `(${initFoo})();`;
+    tag.textContent = `(${init})();`;
     document.documentElement.appendChild(tag);
     document.documentElement.removeChild(tag);
 }
