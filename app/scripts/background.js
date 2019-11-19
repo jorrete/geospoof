@@ -71,3 +71,40 @@ browser.tabs.onRemoved.addListener(id => {
     pages.delete(id);
     devtools.delete(id);
 });
+
+// ---------------------------
+
+function statusPageIcon(status, tabId) {
+    if (status) {
+        console.log('show');
+        browser.pageAction.show(tabId);
+        browser.pageAction.setIcon({
+            tabId: tabId,
+            path: 'images/icon-48.png'
+        });
+    } else {
+        console.log('hide');
+        browser.pageAction.hide(tabId);
+        browser.pageAction.setIcon({
+            tabId: tabId,
+            path: 'images/icon_gray-48.png'
+        });
+    }
+}
+
+// activate already opened pages
+browser.tabs.query({}).then((tabs) => {
+    for (let tab of tabs) {
+        // statusPageIcon(false, tab.id);
+        statusPageIcon(true, tab.id);
+    }
+});
+
+browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+    console.log(tab, tab.id);
+    // statusPage(true, tab.id);
+});
+
+browser.pageAction.onClicked.addListener(event => {
+    console.log('[background][pageAction][click]', event);
+});
