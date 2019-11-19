@@ -65,4 +65,8 @@ browser.storage.local.get().then(storage => {
             status: true,
         });
     }
+
+    port.onMessage.addListener(() => {
+        document.getElementById('status').click();
+    });
 });

@@ -101,3 +101,12 @@ hr {
 #initial {
     margin: 0;
 }
+
+#donate {
+    background-color: gold;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    color: #7d6a00 !important;
+    font-weight: bolder;
+    text-decoration: none !important;
+}

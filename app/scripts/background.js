@@ -1,6 +1,25 @@
+function pageIconStatus(status, tabId) {
+    console.log('[pageIconStatus]', status, tabId);
+
+    browser.pageAction.show(tabId);
+
+    if (status) {
+        browser.pageAction.setIcon({
+            tabId: tabId,
+            path: 'images/icon-48.png'
+        });
+    } else {
+        browser.pageAction.setIcon({
+            tabId: tabId,
+            path: 'images/icon_gray-48.png'
+        });
+    }
+}
+
 // register contexts
 const pages = new Map();
 const devtools = new Map();
+const ports = new Map();
 
 let position, status;
 
@@ -21,6 +40,7 @@ browser.runtime.onConnect.addListener(port => {
             }
 
             try {
+                pageIconStatus(false, tabId);
                 pages.get(tabId).postMessage({
                     status: false,
                 });
@@ -47,24 +67,16 @@ browser.runtime.onConnect.addListener(port => {
                 position: position,
                 status: status,
             });
+
+            pageIconStatus(status, tabId);
         });
     }
     else if (name.startsWith('content_script')) {
         tabId = port.sender.tab.id;
         pages.set(tabId, port);
-
-        port.onMessage.addListener(message => {
-
-            if (!pages.has(tabId) || !message.ping) {
-                return;
-            }
-
-            pages.get(tabId).postMessage({
-                position: position,
-                status: status,
-            });
-        });
     }
+
+    ports.set(tabId, port);
 });
 
 browser.tabs.onRemoved.addListener(id => {
@@ -72,39 +84,30 @@ browser.tabs.onRemoved.addListener(id => {
     devtools.delete(id);
 });
 
-// ---------------------------
-
-function statusPageIcon(status, tabId) {
-    if (status) {
-        console.log('show');
-        browser.pageAction.show(tabId);
-        browser.pageAction.setIcon({
-            tabId: tabId,
-            path: 'images/icon-48.png'
-        });
-    } else {
-        console.log('hide');
-        browser.pageAction.hide(tabId);
-        browser.pageAction.setIcon({
-            tabId: tabId,
-            path: 'images/icon_gray-48.png'
-        });
-    }
-}
 
 // activate already opened pages
 browser.tabs.query({}).then((tabs) => {
     for (let tab of tabs) {
-        // statusPageIcon(false, tab.id);
-        statusPageIcon(true, tab.id);
+        pageIconStatus(false, tab.id);
     }
 });
 
+// on navigate reset
 browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    console.log(tab, tab.id);
-    // statusPage(true, tab.id);
+    pageIconStatus(false, tab.id);
 });
+
 
 browser.pageAction.onClicked.addListener(event => {
     console.log('[background][pageAction][click]', event);
+
+    const port = ports.get(event.id);
+
+    if (!port) {
+        return;
+    }
+
+    port.postMessage({
+        click: true,
+    });
 });
