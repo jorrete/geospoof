@@ -17,71 +17,48 @@ function pageIconStatus(status, tabId) {
 }
 
 // register contexts
-const pages = new Map();
-const devtools = new Map();
-const ports = new Map();
-
-let position, status;
+const tabs = new Map();
+const remotes = new Map();
 
 browser.runtime.onConnect.addListener(port => {
-    const name = port.name;
-    let tabId;
+    port.isTab = port.sender.frameId === undefined;
+    port.isRemote = port.sender.frameId !== undefined;
 
-    console.log('[onConnect]', port);
-
-    if (name.startsWith('devtools')) {
-        tabId = parseInt(name.split('_')[1]);
-            
-        devtools.set(tabId, port);
-
-        port.onDisconnect.addListener(() => {
-            if (!pages.has(tabId)) {
-                return;
-            }
-
-            try {
-                pageIconStatus(false, tabId);
-                pages.get(tabId).postMessage({
-                    status: false,
-                });
-            } catch (e) {
-                void 0;
-            }
-        });
-
-        port.onMessage.addListener(message => {
-            if (message.settings) {
-                browser.runtime.openOptionsPage()
-                return;
-            }
-
-
-            if (!pages.has(tabId)) {
-                return;
-            }
-
-            position = message.position;
-            status = message.status;
-
-            pages.get(tabId).postMessage({
-                position: position,
-                status: status,
-            });
-
-            pageIconStatus(status, tabId);
-        });
-    }
-    else if (name.startsWith('content_script')) {
-        tabId = port.sender.tab.id;
-        pages.set(tabId, port);
+    if (port.isTab) {
+        port.sender.tabId = parseInt(port.name.split('_')[1]);
+        tabs.set(port.sender.tabId, port);
+    } else {
+        remotes.set(port.sender.frameId, port);
     }
 
-    ports.set(tabId, port);
+    port.onDisconnect.addListener(() => {
+        try {
+            if (port.isTab) {
+                pageIconStatus(false, port.sender.tabId);
+            }
+        } catch (e) {
+            void 0;
+        }
+    });
+
+    port.onMessage.addListener(message => {
+        if (message.settings) {
+            browser.runtime.openOptionsPage()
+            return;
+        }
+
+        if (port.isTab && message.status !== undefined) {
+            pageIconStatus(message.status, port.sender.tabId);
+        }
+    });
+
+    console.log('[onConnect]', port, port.sender);
 });
 
 browser.tabs.onRemoved.addListener(id => {
-    pages.delete(id);
-    devtools.delete(id);
+    if (tabs.has(id)) {
+        tabs.delete(id);
+    }
 });
 
 
@@ -101,7 +78,7 @@ browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 browser.pageAction.onClicked.addListener(event => {
     console.log('[background][pageAction][click]', event);
 
-    const port = ports.get(event.id);
+    const port = tabs.get(event.id);
 
     if (!port) {
         return;

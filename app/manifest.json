@@ -23,19 +23,6 @@
     },
     "minimum_chrome_version": "78.0",
     "devtools_page": "pages/devtools_page.html",
-    "content_scripts": [
-        {
-            "run_at": "document_start",
-            "all_frames": true,
-            "matches": [
-                "http://*/*",
-                "https://*/*"
-            ],
-            "js": [
-                "scripts/content_script.js"
-            ]
-        }
-    ],
     "options_ui": {
         "page": "pages/options_page.html",
         "open_in_tab": true
