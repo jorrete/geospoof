@@ -12,5 +12,3 @@ browser.devtools.panels.create(
       console.log('[devtools_panel][hide]');
   });
 });
-if (browser.devtools.inspectedWindow.tabId) {
-}
