@@ -9,6 +9,10 @@ You can set the location by map, coordinates or reproduce a GPX track.
 https://{a-c}.yourser.ver/x/y/x/?key
 ```
 
+This is a development extension it is not meant to be a privacy extension to not reveal your real geolocation.
+
+The spoofed position it only will work as long as the developer tools are opened and activated from the Geospoof panel.
+
 ## Installation
 This webextension uses the very convinient tool [webextension-toolbox](https://github.com/webextension-toolbox/webextension-toolbox).
 ```
@@ -26,3 +30,13 @@ npm run dev [firefox|chrome]
 ```
 npm run build [firefox|chrome] 
 ```
+
+## Contexts
+
+### Firefox
+- Browser tabs.
+
+### Chrome
+- Browser tabs.
+- Android remote tabs.
+- Cordova apps.
