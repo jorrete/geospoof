@@ -130,6 +130,10 @@ export class StatusApp {
         this._setCoords(options.coords);
     }
 
+    resizeMap() {
+        this.map.resize();
+    }
+
     changeDirection(direction) {
         this._track.geometry.coordinates = this._track.geometry.coordinates.reverse();
 

@@ -125,10 +125,9 @@ export function initMap(options={}) {
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        setTimeout(() => {
-            map.updateSize();
-        }, 1000);
+        map.updateSize();
     });
+    map.updateSize();
 
     return {
         updatePosition: function (position) {
@@ -148,8 +147,10 @@ export function initMap(options={}) {
             trackSource.clear();
         },
         setUrl: function (url) {
-            console.log('setUrl', url);
             source.setUrl(url);
+        },
+        resize: function () {
+            map.updateSize();
         }
     }
 }

@@ -41,8 +41,18 @@
                     <div class="settings-example">
                         example: 39.123
                     </div>
-                    <input class="settings-input" type="number" step="any" id="longitude" placeholder="Longitude" value="" lang="en_EN"/>
-                    <input class="settings-input" type="number" step="any" id="latitude" placeholder="Latitude" value="" lang="en_EN"/>
+                    <label>
+                        <span>Longitude</span>
+                        <input class="settings-input" type="number" step="any" id="longitude" placeholder="..." value="" lang="en_EN"/>
+                    </label>
+                    <label>
+                        <span>Latitude</span>
+                        <input class="settings-input" type="number" step="any" id="latitude" placeholder="..." value="" lang="en_EN"/>
+                    </label>
+                    <label>
+                        <span>Accuracy</span>
+                        <input class="settings-input" type="number" step="1" min="1" max="10000" id="accuracy" placeholder="..." value="" lang="en_EN"/>
+                    </label>
                 </div>
                 <hr>
                 <div class="subsection">

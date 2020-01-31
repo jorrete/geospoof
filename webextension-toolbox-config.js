@@ -7,9 +7,6 @@ module.exports = {
         // Perform customizations to webpack config
 
         if (!dev) {
-            // config.plugins.unshift(new WebpackClearConsole());
-            // config.plugins.splice(4, 0, new WebpackClearConsole());
-
             config.optimization.minimizer = [
                 new TerserPlugin({
                     sourceMap: true, // Must be set to true if using source-maps in production

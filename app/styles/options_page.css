@@ -110,3 +110,8 @@ hr {
     font-weight: bolder;
     text-decoration: none !important;
 }
+
+label span {
+    padding-top: 1rem;
+    display: block;
+}
