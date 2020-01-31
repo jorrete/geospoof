@@ -27,6 +27,18 @@
             "scripts/background.js"
         ]
     },
+    "content_scripts": [
+        {
+            "run_at": "document_start",
+            "matches": [
+                "http://*/*",
+                "https://*/*"
+            ],
+            "js": [
+                "scripts/content_script.js"
+            ]
+        }
+    ],
     "minimum_chrome_version": "78.0",
     "devtools_page": "pages/devtools_page.html",
     "options_ui": {
