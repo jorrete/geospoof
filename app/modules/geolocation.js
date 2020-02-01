@@ -1,6 +1,5 @@
-const TIMEOUT = 5000;
-
 export function init(options={}) {
+    const TIMEOUT = 5000;
     let position = options.position,
         status = Boolean(options.status);
 
