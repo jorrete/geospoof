@@ -1,6 +1,7 @@
-import {StatusApp} from '../../app/modules/status';
-import {positionToCoords} from '../../app/modules/helpers';
 import ua from '../modules/ua.js';
+import {StatusApp} from '../../app/modules/status';
+import {getStorage, getOptions, setStorage} from '../modules/storage.js';
+import {positionToCoords} from '../../app/modules/helpers';
 
 const isTab = browser.devtools.inspectedWindow.tabId !== undefined;
 const port = browser.runtime.connect({
@@ -20,47 +21,51 @@ if (browser.devtools.panels.onThemeChanged) {
 }
 
 setTheme(browser.devtools.panels.themeName);
-
-
+let _status = false;
 function setStatus(status) {
+    status = status === undefined? _status: status;
     port.postMessage({
         status: status,
     });
     browser.devtools.inspectedWindow.eval(`navigator.geolocation.setStatus(${status})`);
+    _status = status;
 }
 
+let _position = undefined;
 function setPosition(position) {
+    position = position === undefined? _position: position;
     browser.devtools.inspectedWindow.eval(`navigator.geolocation.setPosition(${JSON.stringify(position)})`);
+    _position = position;
 }
 
-browser.storage.local.get().then(storage => {
+Promise.all([
+    getStorage(),
+    getOptions(),
+]).then(([storage, options]) => {
+    _position = options.position;
+    _status = options.status;
+
     document.getElementById('enabled').checked = storage.initial;
     document.getElementById('accuracy_num').value = storage.accuracy;
 
     const status = new StatusApp({
         url: storage.tiles_url || '',
-        coords: [storage.longitude || 0, storage.latitude || 0],
+        coords: [storage.longitude, storage.latitude],
         onupdate: position => {
-            browser.storage.local.get().then(storage => {
-                const coords = positionToCoords(position);
-                storage.longitude = coords[0];
-                storage.latitude = coords[1];
-                browser.storage.local.set(storage).then(() => {
-                    setPosition(position);
-                });
-            });
+            setPosition(position);
         },
     });
 
+    // port.postMessage({
+    //     settings: true,
+    // });
 
     setTimeout(() => {
         status.resizeMap();
     }, 1000);
 
-
-
     browser.storage.onChanged.addListener(storage => {
-        if (storage.tiles_url.newValue !== storage.tiles_url.oldValue) {
+        if (storage.tiles_url.newValue && storage.tiles_url.newValue !== storage.tiles_url.oldValue) {
             status.map.setUrl(storage.tiles_url.newValue);
         }
     });
@@ -77,16 +82,22 @@ browser.storage.local.get().then(storage => {
         });
     }
 
-    if (storage.initial === true) {
-        setStatus(true);
-    }
-
-    port.onMessage.addListener(() => {
-        document.getElementById('status').click();
-    });
-
-
     document.getElementById('enabled').addEventListener('change', () => {
         setStatus(document.getElementById('enabled').checked);
     });
+
+    document.getElementById('save').addEventListener('click', () => {
+        console.log('save!!');
+        const coords = positionToCoords(_position);
+        setStorage({
+            longitude: coords[0],
+            latitude: coords[1],
+            accuracy: document.getElementById('accuracy_num').value
+        })
+    });
+});
+
+browser.devtools.network.onNavigated.addListener(() => {
+    setStatus();
+    setPosition();
 });

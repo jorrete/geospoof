@@ -1,45 +1,73 @@
-function pageIconStatus(status, tabId) {
-    console.log('[pageIconStatus]', status, tabId);
+import {getStorage} from '../modules/storage.js';
 
-    browser.pageAction.show(tabId);
+// register contexts
+const content = new Map();
+const dev_page = new Map();
+const dev_panel = new Map();
+const remote = new Map();
+
+function pageIconStatus(id, status) {
+    console.log('[pageIconStatus]', id, status, content);
+
+    if (!content.has(id)) {
+        return;
+    }
+
+    browser.pageAction.show(id);
 
     if (status) {
         browser.pageAction.setIcon({
-            tabId: tabId,
+            tabId: id,
             path: 'images/icon-48.png'
         });
     } else {
         browser.pageAction.setIcon({
-            tabId: tabId,
+            tabId: id,
             path: 'images/icon_gray-48.png'
         });
     }
 }
 
-// register contexts
-const tabs = new Map();
-const remotes = new Map();
-
 browser.runtime.onConnect.addListener(port => {
-    port.isTab = port.sender.frameId === undefined;
-    port.isRemote = port.sender.frameId !== undefined;
+    if (port.sender.tab && port.sender.tab.id !== -1) {
+        port.isTab = true;
+        port.isDevtoolsPage = false;
+        port.isDevtoolsPanel = false;
+        port.isRemote = false;
+        port.sender.tabId = port.sender.tab.id;
+        content.set(port.sender.tabId, port);
 
-    if (port.isTab) {
-        port.sender.tabId = parseInt(port.name.split('_')[1]);
-        tabs.set(port.sender.tabId, port);
-    } else {
-        remotes.set(port.sender.frameId, port);
+        getStorage().then(storage => {
+            pageIconStatus(port.sender.tabId, storage.initial);
+        });
     }
 
-    port.onDisconnect.addListener(() => {
-        try {
-            if (port.isTab) {
-                pageIconStatus(false, port.sender.tabId);
-            }
-        } catch (e) {
-            void 0;
-        }
-    });
+    else if (port.sender.url.endsWith('devtools_page.html')) {
+        port.isTab = false;
+        port.isDevtoolsPage = true;
+        port.isDevtoolsPanel = false;
+        port.isRemote = false;
+        port.sender.tabId = parseInt(port.name.split('_')[1]);
+        dev_page.set(port.sender.tabId, port);
+    }
+
+    else if (port.sender.url.endsWith('devtools_panel.html')) {
+        port.isTab = false;
+        port.isDevtoolsPage = false;
+        port.isDevtoolsPanel = true;
+        port.isRemote = false;
+        port.sender.tabId = parseInt(port.name.split('_')[1]);
+        dev_panel.set(port.sender.tabId, port);
+    }
+
+    else if (port.sender.frameId !== undefined) {
+        port.isTab = false;
+        port.DevtoolsPage = false;
+        port.DevtoolsPanel = false;
+        port.isRemote = true;
+        port.sender.tabId = parseInt(port.name.split('_')[1]);
+        remote.set(port.sender.frameId, port);
+    }
 
     port.onMessage.addListener(message => {
         if (message.settings) {
@@ -47,8 +75,8 @@ browser.runtime.onConnect.addListener(port => {
             return;
         }
 
-        if (port.isTab && message.status !== undefined) {
-            pageIconStatus(message.status, port.sender.tabId);
+        if (port.isDevtoolsPanel && message.status !== undefined) {
+            pageIconStatus(port.sender.tabId, message.status);
         }
     });
 
@@ -56,35 +84,25 @@ browser.runtime.onConnect.addListener(port => {
 });
 
 browser.tabs.onRemoved.addListener(id => {
-    if (tabs.has(id)) {
-        tabs.delete(id);
+    if (content.has(id)) {
+        content.delete(id);
+    }
+
+    if (dev_page.has(id)) {
+        dev_page.delete(id);
+    }
+
+    if (dev_panel.has(id)) {
+        dev_panel.delete(id);
     }
 });
 
 
 // activate already opened pages
 browser.tabs.query({}).then((tabs) => {
-    for (let tab of tabs) {
-        pageIconStatus(false, tab.id);
-    }
-});
-
-// on navigate reset
-browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    pageIconStatus(false, tab.id);
-});
-
-
-browser.pageAction.onClicked.addListener(event => {
-    console.log('[background][pageAction][click]', event);
-
-    const port = tabs.get(event.id);
-
-    if (!port) {
-        return;
-    }
-
-    port.postMessage({
-        click: true,
+    getStorage().then(storage => {
+        for (let tab of tabs) {
+            pageIconStatus(tab.id, storage.initial);
+        }
     });
 });

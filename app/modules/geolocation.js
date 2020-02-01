@@ -1,28 +1,14 @@
-import {buildPosition} from '../modules/helpers.js';
-
 const TIMEOUT = 5000;
-const SERVER_URL = 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-const COORDS = [-0.3303, 39.46118];
-const isDev = process.env.NODE_ENV === 'development';
-const isTab = browser.devtools.inspectedWindow.tabId !== undefined;
-const port = browser.runtime.connect({
-    name: `devtoolspage${isTab? `_${browser.devtools.inspectedWindow.tabId}`: ''}`,
-});
 
-function init(options) {
-    // let timestamp = new Date(),
+export function init(options={}) {
     let position = options.position,
-        status = options.status;
+        status = Boolean(options.status);
 
 
     const getCurrentPosition = navigator.geolocation.getCurrentPosition,
           watchPosition = navigator.geolocation.watchPosition,
           clearWatch = navigator.geolocation.clearWatch;
 
-
-    // const isConnected = function () {
-    //     return (new Date() - timestamp) < 1200;
-    // };
 
     const errors = {
         '1': 'PERMISSION_DENIED',
@@ -96,30 +82,4 @@ function init(options) {
         }
     })
     console.log('[Geospoof][init]', options, navigator.geolocation);
-}
-
-export function inject() {
-    browser.storage.local.get().then(storage => {
-        // default settings
-        storage = Object.assign(storage, {
-            tiles_url: storage.tiles_url !== undefined? storage.tiles_url: isDev? SERVER_URL: '',
-            initial: storage.initial !== undefined? storage.initial: true,
-            longitude: storage.longitude !== undefined? storage.longitude: isDev? COORDS[0]: '',
-            latitude: storage.latitude !== undefined? storage.latitude: isDev? COORDS[1]: '',
-            accuracy: storage.accuracy !== undefined? storage.accuracy: 5,
-        })
-
-        browser.storage.local.set(storage).then(() => {
-            const options = {
-                position: buildPosition([storage.longitude, storage.latitude], storage.accuracy),
-                status: storage.initial || false,
-            };
-
-            port.postMessage({
-                status: options.status,
-            });
-
-            browser.devtools.inspectedWindow.eval(`(${init})(${JSON.stringify(options)});`);
-        });
-    });
 }

@@ -296,3 +296,7 @@ hr {
 #settings {
     font-size: 24px;
 }
+
+#save {
+    display: flex;
+}

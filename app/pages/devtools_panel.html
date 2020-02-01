@@ -9,7 +9,9 @@
     <body>
         <div id="controls">
             <div class="flex">
-                <div class="fill"></div>
+                <div class="fill left">
+                    <button id="save">&#128190;</button>
+                </div>
                 <div class="fill center">
                     <label id="status" class="switch pointer noselect rounded">
                         <input id="enabled" type="checkbox" name="enabled" />
@@ -25,7 +27,7 @@
             </div>
             <div>
                 <fieldset class="rounded">
-                    <legend>Coordinates</legend>
+                    <legend><span>Coordinates</span></legend>
                     <fieldset class="rounded">
                         <legend>Longitude</legend>
                         <div class="flex right">
@@ -76,7 +78,6 @@
                     <div class="flex">
                         <label id="file" class="pointer fill">
                             <input type="file" name="track" id="track" accept=".gpx" />
-                            <span>&#128190;</span>
                             <span id="track_name">GPX</span>
                         </label>
                         <button type="reset" id="track_reset" class="disabled">

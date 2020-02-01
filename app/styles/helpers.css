@@ -12,10 +12,23 @@
 
 .fill {
     flex: auto;
+    display: flex;
+    align-items: center;
 }
 
 .right {
     text-align: right;
+    justify-content: flex-end;
+}
+
+.left {
+    text-align: left;
+    justify-content: left;
+}
+
+.center {
+    text-align: center;
+    justify-content: center;
 }
 
 .middle,
