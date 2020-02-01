@@ -56,10 +56,6 @@ Promise.all([
         },
     });
 
-    // port.postMessage({
-    //     settings: true,
-    // });
-
     setTimeout(() => {
         status.resizeMap();
     }, 1000);

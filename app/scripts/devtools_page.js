@@ -23,6 +23,7 @@ browser.devtools.panels.create(
 
 function inject() {
     getOptions().then(options => {
+        console.log('inject');
         browser.devtools.inspectedWindow.eval(`(${init})(${JSON.stringify(options)});`);
         port.postMessage({
             status: options.status,
@@ -39,4 +40,3 @@ browser.devtools.inspectedWindow.eval('navigator.geolocation.isFake').then(isFak
     browser.devtools.network.onNavigated.addListener(inject);
     inject();
 });
-
