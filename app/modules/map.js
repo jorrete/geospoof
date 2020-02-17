@@ -11,7 +11,7 @@ import {Point} from '../../node_modules/ol/geom';
 import Feature from '../../node_modules/ol/Feature';
 import GeoJSON from '../../node_modules/ol/format/GeoJSON';
 import {defaults as defaultControls, ScaleLine, Control} from 'ol/control';
-import {defaults as defaultInteractions, DragRotateAndZoom} from 'ol/interaction';
+import {DragRotateAndZoom, DragPan, MouseWheelZoom, Pointer} from 'ol/interaction';
 
 class RotateNorthControl extends Control {
     constructor(options={}) {
@@ -49,9 +49,12 @@ export function initMap(options={}) {
 
     let map = new Map({
         target: 'map',
-        interactions: defaultInteractions().extend([
+        interactions: [
+            new Pointer(),
+            new MouseWheelZoom(),
+            new DragPan(),
             new DragRotateAndZoom(),
-        ]),
+        ],
         controls: defaultControls().extend([
             new ScaleLine({
                 units: 'metric',
@@ -103,6 +106,10 @@ export function initMap(options={}) {
             center: fromLonLat(options.initialCoordinates),
             zoom: 15,
         })
+    });
+
+    map.on('dblclick', function(event) {
+        options.onchange(toLonLat(event.coordinate));
     });
 
     let modify = new Modify({source: pointSource});
