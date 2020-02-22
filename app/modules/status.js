@@ -6,6 +6,7 @@ import length from '../../node_modules/@turf/length';
 import lineSlice from '../../node_modules/@turf/line-slice';
 import pointToLineDistance from '../../node_modules/@turf/point-to-line-distance';
 import {point} from '../../node_modules/@turf/helpers';
+import nearestPointOnLine from '../../node_modules/@turf/nearest-point-on-line'
 
 const INTERVAL = 500;
 
@@ -19,6 +20,7 @@ export class StatusApp {
 
         this.field = {
             accuracy: document.getElementById('accuracy_num'),
+            altitude: document.getElementById('altitude_num'),
             lon: document.getElementById('lon'),
             lon_deg: document.getElementById('lon_deg'),
             lon_min: document.getElementById('lon_min'),
@@ -69,10 +71,11 @@ export class StatusApp {
         [
             'lon',
             'lat',
+            'altitude',
         ].forEach(id => {
             this.field[id].addEventListener('change', () => {
                 this.pauseTrack();
-                this._setCoords([this.field.lon.value, this.field.lat.value]);
+                this._setCoords([this.field.lon.value, this.field.lat.value, this.field.altitude.value]);
             })
         });
 
@@ -98,15 +101,15 @@ export class StatusApp {
                     this.field.lat_min.value,
                     this.field.lat_sec.value,
                     this.field.lat_orientation.value);
-                this._setCoords([lon, lat]);
+                this._setCoords([lon, lat, this.altitude]);
             });
         });
-
 
         this.map = initMap({
             url: options.url,
             initialCoordinates: options.coords,
             onchange: coords => {
+                coords.push(this.altitude)
                 this._setCoords(coords);
                 var pt = point(coords);
                 if (!this._track) {
@@ -125,6 +128,10 @@ export class StatusApp {
             ongrab: () => {
                 this.pauseTrack();
             },
+        });
+
+        browser.storage.onChanged.addListener(storage => {
+            this._setCoords([storage.longitude.newValue, storage.latitude.newValue, storage.altitude.newValue]);
         });
 
         this._setCoords(options.coords);
@@ -201,6 +208,14 @@ export class StatusApp {
             }
 
             const pt = along(this._track, this._distance, {units: 'meters'});
+
+            // try to get altitude
+            const closest = nearestPointOnLine(this._track, pt);
+            const previousHeight = this._track.geometry.coordinates[closest.properties.index][2];
+            if (previousHeight !== undefined) {
+                pt.geometry.coordinates.push(previousHeight);
+            }
+
             this._setCoords(pt.geometry.coordinates);
 
         }, INTERVAL);
@@ -227,6 +242,7 @@ export class StatusApp {
         this._coords = [
             (Math.abs(coords[0]) > 180? 180: Math.abs(coords[0])) * (coords[0] >= 0? 1: -1),
             (Math.abs(coords[1]) > 90? 90: Math.abs(coords[1])) * (coords[1] >= 0? 1: -1),
+            parseInt(coords[2] !== undefined? coords[2]: 0),
         ];
         this._position = buildPosition(this._coords, this.accuracy);
         this._updateFields();
@@ -248,6 +264,8 @@ export class StatusApp {
         this.field.lat_min.value = lat[1];
         this.field.lat_sec.value = lat[2];
         this.field.lat_orientation.value = lat[3];
+
+        this.field.altitude.value = this.altitude;
     }
 
     get coords() {
@@ -264,6 +282,10 @@ export class StatusApp {
 
     get latitude () {
         return this._coords[1];
+    }
+
+    get altitude () {
+        return this._coords[2];
     }
 
     get accuracy () {

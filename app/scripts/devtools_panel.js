@@ -47,10 +47,11 @@ Promise.all([
 
     document.getElementById('enabled').checked = storage.initial;
     document.getElementById('accuracy_num').value = storage.accuracy;
+    document.getElementById('altitude_num').value = storage.altitude;
 
     const status = new StatusApp({
         url: storage.tiles_url || '',
-        coords: [storage.longitude, storage.latitude],
+        coords: [storage.longitude, storage.latitude, storage.altitude],
         onupdate: position => {
             setPosition(position);
         },
@@ -61,6 +62,10 @@ Promise.all([
     }, 1000);
 
     browser.storage.onChanged.addListener(storage => {
+        if (storage.accuracy.newValue) {
+            document.getElementById('accuracy_num').value = storage.accuracy.newValue;
+        }
+
         if (storage.tiles_url.newValue && storage.tiles_url.newValue !== storage.tiles_url.oldValue) {
             status.map.setUrl(storage.tiles_url.newValue);
         }
@@ -83,12 +88,12 @@ Promise.all([
     });
 
     document.getElementById('save').addEventListener('click', () => {
-        console.log('save!!');
         const coords = positionToCoords(_position);
         setStorage({
             longitude: coords[0],
             latitude: coords[1],
-            accuracy: document.getElementById('accuracy_num').value
+            accuracy: document.getElementById('accuracy_num').value,
+            altitude: document.getElementById('altitude_num').value,
         })
     });
 });

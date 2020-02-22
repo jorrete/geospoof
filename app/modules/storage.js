@@ -13,6 +13,7 @@ export function getStorage() {
             longitude: storage.longitude !== undefined? storage.longitude: isDev? COORDS[0]: 0,
             latitude: storage.latitude !== undefined? storage.latitude: isDev? COORDS[1]: 0,
             accuracy: storage.accuracy !== undefined? storage.accuracy: 5,
+            altitude: storage.altitude !== undefined? storage.altitude: 0,
         })).then(() => {
             return browser.storage.local.get();
         });
