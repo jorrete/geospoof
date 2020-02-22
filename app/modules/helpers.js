@@ -5,13 +5,13 @@ function formatPosition(position, extra={}) {
     return Object.assign({
         'timestamp': parseInt(position.timestamp) || new Date().getTime(),
         'coords': {
-            'accuracy':         parseInt(position.coords.accuracy) || null,
-            'altitude':         parseInt(position.coords.altitude) || null,
+            'latitude': parseFloat(position.coords.latitude),
+            'longitude': parseFloat(position.coords.longitude),
+            'altitude': position.coords.altitude !== undefined? parseInt(position.coords.altitude): null,
+            'accuracy': parseInt(position.coords.accuracy) || null,
             'altitudeAccuracy': parseInt(position.coords.altitudeAccuracy) || null,
-            'latitude':         parseFloat(position.coords.latitude),
-            'longitude':        parseFloat(position.coords.longitude),
-            'heading':          parseInt(position.coords.heading) || null,
-            'speed':            parseInt(position.coords.speed) || null,
+            'heading': parseInt(position.coords.heading) || null,
+            'speed': parseInt(position.coords.speed) || null,
         },
     }, extra);
 }
