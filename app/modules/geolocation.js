@@ -80,5 +80,7 @@ export function init(options={}) {
             return status;
         }
     })
+
+    document.dispatchEvent(new CustomEvent('geospoof'));
     console.log('[Geospoof][init]', options, navigator.geolocation);
 }
