@@ -43,6 +43,7 @@ export function init(options={}) {
                 return error(new PositionError());
             }
 
+            success(position);
             return setInterval(() => {
                 success(position);
             }, TIMEOUT);
