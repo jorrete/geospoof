@@ -5,9 +5,9 @@ import {getOptions} from '../modules/storage.js';
 const isTab = (
     browser.devtools.inspectedWindow.tabId !== undefined
     && browser.devtools.inspectedWindow.tabId !== null
-    && location.protocol.startsWith('http')
+    // && location.protocol.startsWith('http')
 );
-console.log('xxxxxxxxxxxxxxx');
+
 const port = browser.runtime.connect({
     name: `devtoolspage${isTab? `_${browser.devtools.inspectedWindow.tabId}`: ''}`,
 });
@@ -27,25 +27,35 @@ function inject() {
 // on tabs is ok because content_script is injected
 // before but on remote is injected on panel visible
 if (isTab) {
-    // create panel
-    browser.devtools.panels.create(
-        values.DEV_PANEL_NAME,
-        '/images/icon-48.png',
-        '/pages/devtools_panel.html').then((newPanel) => {
-            newPanel.onShown.addListener(() => {
-                console.log('[devtools_panel][show]');
-            });
-            newPanel.onHidden.addListener(() => {
-                console.log('[devtools_panel][hide]');
-            });
-        });
+    browser.devtools.inspectedWindow.eval('location.protocol').then(result => {
+        // XXX bug: firefox is returning an array
+        result = Array.isArray(result)? result[0]: result;
 
-    browser.devtools.inspectedWindow.eval('navigator.geolocation.isFake').then(isFake => {
-        // already patched
-        if (isFake) {
+        if (!result.startsWith('http')) {
             return;
         }
-        browser.devtools.network.onNavigated.addListener(inject);
-        inject();
+
+        // create panel
+        browser.devtools.panels.create(
+            values.DEV_PANEL_NAME,
+            '/images/icon-48.png',
+            '/pages/devtools_panel.html').then((newPanel) => {
+                newPanel.onShown.addListener(() => {
+                    console.log('[devtools_panel][show]');
+                });
+                newPanel.onHidden.addListener(() => {
+                    console.log('[devtools_panel][hide]');
+                });
+            });
+
+
+        browser.devtools.inspectedWindow.eval('navigator.geolocation.isFake').then(isFake => {
+            // already patched
+            if (isFake) {
+                return;
+            }
+            browser.devtools.network.onNavigated.addListener(inject);
+            inject();
+        });
     });
 }
