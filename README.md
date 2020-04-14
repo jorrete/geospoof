@@ -39,4 +39,3 @@ npm run build [firefox|chrome]
 ### Chrome
 - Browser tabs.
 - Android remote tabs.
-- Cordova apps.
