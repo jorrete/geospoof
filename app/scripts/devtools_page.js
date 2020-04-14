@@ -2,7 +2,12 @@ import * as values from '../modules/values.js';
 import {init} from '../modules/geolocation.js';
 import {getOptions} from '../modules/storage.js';
 
-const isTab = browser.devtools.inspectedWindow.tabId !== undefined && browser.devtools.inspectedWindow.tabId !== null;
+const isTab = (
+    browser.devtools.inspectedWindow.tabId !== undefined
+    && browser.devtools.inspectedWindow.tabId !== null
+    && location.protocol.startsWith('http')
+);
+console.log('xxxxxxxxxxxxxxx');
 const port = browser.runtime.connect({
     name: `devtoolspage${isTab? `_${browser.devtools.inspectedWindow.tabId}`: ''}`,
 });
