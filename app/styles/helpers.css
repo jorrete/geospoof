@@ -2,6 +2,16 @@
     cursor: pointer;
 }
 
+.button:hover,
+.button:hover * {
+    color: #ff9c9c !important;
+}
+
+.button:active,
+.button:active * {
+    color: red !important;
+}
+
 .center {
     text-align: center;
 }

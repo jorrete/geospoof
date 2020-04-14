@@ -10,17 +10,17 @@
         <div id="controls">
             <div class="flex">
                 <div class="fill left">
-                    <button id="save">&#128190;</button>
+                    <button id="save" class="button">SAVE</button>
                 </div>
                 <div class="fill center">
                     <label id="status" class="switch pointer noselect rounded">
                         <input id="enabled" type="checkbox" name="enabled" />
-                        <span id="on">ON</span>
-                        <span id="off">OFF</span>
+                        <span id="on" class="button">ON</span>
+                        <span id="off" class="button">OFF</span>
                     </label>
                 </div>
                 <div class="fill right">
-                    <button id="settings">
+                    <button id="settings" class="button">
                         <span>&#9881;</span>
                     </button>
                 </div>
@@ -83,18 +83,18 @@
                 <fieldset class="rounded">
                     <legend>Track</legend>
                     <div class="flex">
-                        <label id="file" class="pointer fill">
+                        <label id="file" class="pointer fill button">
                             <input type="file" name="track" id="track" accept=".gpx" />
                             <span id="track_name">GPX</span>
                         </label>
-                        <button type="reset" id="track_reset" class="disabled">
+                        <button type="reset" id="track_reset" class="disabled button">
                             <span>&#128473;</span>
                         </button>
                     </div>
                     <hr>
                     <div id="track_controls" class="flex disabled">
                         <div class="fill">
-                            <label class="button-switch noselect pointer rounded">
+                            <label class="button-switch noselect pointer rounded button">
                                 <input id="track_play" checked type="checkbox" name="enabled" />
                                 <span>&#9205;</span>
                                 <span>&#9208;</span>
@@ -102,11 +102,11 @@
                         </div>
                         <div class="fill">
                             <div class="radio fill rounded">
-                                <label class="pointer">
+                                <label class="pointer button">
                                     <input type="radio" name="direction" checked value="forward">
                                     <span> &#11106;</span>
                                 </label>
-                                <label class="pointer">
+                                <label class="pointer button">
                                     <input type="radio" name="direction" value="reverse">
                                     <span>&#11104;</span>
                                 </label>
@@ -115,11 +115,11 @@
                         <div class="fill"></div>
                         <div class="fill">
                             <div class="radio fill rounded">
-                                <label class="pointer">
+                                <label class="pointer button">
                                     <input type="radio" name="mode" checked value="oneway">
                                     <span>&#11122;</span>
                                 </label>
-                                <label class="pointer">
+                                <label class="pointer button">
                                     <input type="radio" name="mode" value="loop">
                                     <span>&#8634;</span>
                                 </label>
