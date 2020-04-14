@@ -7,7 +7,7 @@
     "default_locale": "en",
     "browser_specific_settings": {
         "gecko": {
-            "id": "geospoof@addons.jorrodev.info",
+            "id": "{fea9b9d8-d628-45d9-a4f8-c3ea720ba00f}",
             "strict_min_version": "71.0"
         }
     },
